@@ -1,19 +1,13 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from models import PrintRequest
+from printer import print_items
 
-from printer import print_barcode
 
 app = FastAPI(title="Barcode Printing Service")
 
 templates = Jinja2Templates(directory="templates")
-
-
-class PrintRequest(BaseModel):
-    barcode: str
-    quantity: int
-
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -23,17 +17,28 @@ async def home(request: Request):
     )
 
 @app.post("/print")
-async def print_label(request: PrintRequest):
+async def print_labels(request: PrintRequest):
+
+    if len(request.items) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Debe enviar al menos un producto."
+        )
+
+    if len(request.items) > 5:
+        raise HTTPException(
+            status_code=400,
+            detail="Solo se permiten hasta 5 productos."
+        )
 
     try:
 
-        print_barcode(
-            request.barcode,
-            request.quantity
-        )
+        print_items(request.items)
+
+        total = sum(item.quantity for item in request.items)
 
         return {
-            "message": f"Se enviaron {request.quantity} etiquetas correctamente."
+            "message": f"Se enviaron {total} etiquetas correctamente."
         }
 
     except Exception as e:

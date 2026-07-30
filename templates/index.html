@@ -2,169 +2,340 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcode Printing Service</title>
 
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body{
-            font-family: Arial, Helvetica, sans-serif;
-            background:#f5f5f5;
-            margin:0;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-        }
+<title>Barcode Printing Service</title>
 
-        .card{
+<style>
 
-            width:420px;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 5px 15px rgba(0,0,0,.2);
+body{
 
-        }
+    font-family: Arial, Helvetica, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
 
-        h2{
+}
 
-            margin-top:0;
-            text-align:center;
 
-        }
+.card{
 
-        label{
+    width:600px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
 
-            font-weight:bold;
+}
 
-        }
 
-        input{
+h2{
 
-            width:100%;
-            box-sizing:border-box;
-            padding:10px;
-            font-size:16px;
-            margin-top:5px;
-            margin-bottom:20px;
+    margin-top:0;
+    text-align:center;
 
-        }
+}
 
-        button{
 
-            width:100%;
-            padding:12px;
-            font-size:17px;
-            cursor:pointer;
-            border:none;
-            border-radius:6px;
-            background:#1976d2;
-            color:white;
+table{
 
-        }
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
 
-        button:hover{
+}
 
-            background:#0d47a1;
 
-        }
+th{
 
-        #status{
+    background:#1976d2;
+    color:white;
+    padding:12px;
 
-            margin-top:20px;
-            text-align:center;
-            font-weight:bold;
+}
 
-        }
 
-    </style>
+td{
+
+    padding:8px;
+    border-bottom:1px solid #ddd;
+
+}
+
+
+input{
+
+    width:95%;
+    box-sizing:border-box;
+    padding:10px;
+    font-size:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+
+}
+
+
+.qty{
+
+    width:100px;
+
+}
+
+
+button{
+
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    font-size:17px;
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    background:#1976d2;
+    color:white;
+
+}
+
+
+button:hover{
+
+    background:#0d47a1;
+
+}
+
+
+#status{
+
+    margin-top:20px;
+    text-align:center;
+    font-weight:bold;
+
+}
+
+
+</style>
 
 </head>
 
+
 <body>
+
 
 <div class="card">
 
-    <h2>Barcode Printing Service</h2>
 
-    <label>Código de barras</label>
+<h2>Barcode Printing Service</h2>
 
-    <input
-            type="text"
-            id="barcode"
-            placeholder="Ej: ABC123456">
 
-    <label>Cantidad</label>
+<table>
 
-    <input
-            type="number"
-            id="quantity"
-            min="1"
-            value="1">
 
-    <button onclick="printLabel()">
-        Imprimir
-    </button>
+<thead>
 
-    <div id="status"></div>
+<tr>
+
+<th>Código de barras</th>
+
+<th>Cantidad</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+<tr>
+<td>
+<input id="barcode1" type="text" placeholder="Código">
+</td>
+
+<td>
+<input id="qty1" class="qty" type="number" value="1" min="1">
+</td>
+</tr>
+
+
+<tr>
+<td>
+<input id="barcode2" type="text" placeholder="Código">
+</td>
+
+<td>
+<input id="qty2" class="qty" type="number" value="1" min="1">
+</td>
+</tr>
+
+
+<tr>
+<td>
+<input id="barcode3" type="text" placeholder="Código">
+</td>
+
+<td>
+<input id="qty3" class="qty" type="number" value="1" min="1">
+</td>
+</tr>
+
+
+<tr>
+<td>
+<input id="barcode4" type="text" placeholder="Código">
+</td>
+
+<td>
+<input id="qty4" class="qty" type="number" value="1" min="1">
+</td>
+</tr>
+
+
+<tr>
+<td>
+<input id="barcode5" type="text" placeholder="Código">
+</td>
+
+<td>
+<input id="qty5" class="qty" type="number" value="1" min="1">
+</td>
+</tr>
+
+
+</tbody>
+
+
+</table>
+
+
+
+<button onclick="printLabels()">
+
+Imprimir
+
+</button>
+
+
+
+<div id="status"></div>
+
 
 </div>
 
+
+
 <script>
 
-async function printLabel(){
 
-    const barcode=document.getElementById("barcode").value.trim();
+async function printLabels(){
 
-    const quantity=parseInt(document.getElementById("quantity").value);
 
-    if(barcode===""){
+    let items=[];
 
-        alert("Ingrese un código.");
+
+    for(let i=1;i<=5;i++){
+
+
+        let barcode=document
+            .getElementById("barcode"+i)
+            .value
+            .trim();
+
+
+        let quantity=parseInt(
+            document.getElementById("qty"+i).value
+        );
+
+
+        if(barcode !== ""){
+
+
+            items.push({
+
+                barcode:barcode,
+                quantity:quantity
+
+            });
+
+
+        }
+
+
+    }
+
+
+
+    if(items.length===0){
+
+        alert("Ingrese al menos un producto.");
 
         return;
 
     }
 
-    const response=await fetch("/print",{
+
+
+    const response = await fetch("/print",{
+
 
         method:"POST",
 
+
         headers:{
+
             "Content-Type":"application/json"
+
         },
+
 
         body:JSON.stringify({
 
-            barcode:barcode,
-            quantity:quantity
+            items:items
 
         })
 
+
     });
+
+
 
     const data=await response.json();
 
+
     const status=document.getElementById("status");
+
+
 
     if(response.ok){
 
+
         status.style.color="green";
+
         status.innerHTML=data.message;
+
 
     }
     else{
 
+
         status.style.color="red";
+
         status.innerHTML=data.detail;
+
 
     }
 
+
 }
 
+
+
 </script>
+
 
 </body>
 

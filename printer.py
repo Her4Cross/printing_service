@@ -16,8 +16,11 @@ def send_to_printer(zpl: str):
         s.sendall(zpl.encode("utf-8"))
 
 
-def print_barcode(barcode: str, quantity: int):
-    zpl = generate_barcode_label(barcode)
+def print_items(items):
 
-    for _ in range(quantity):
-        send_to_printer(zpl)
+    for item in items:
+
+        zpl = generate_barcode_label(item.barcode)
+
+        for _ in range(item.quantity):
+            send_to_printer(zpl)
